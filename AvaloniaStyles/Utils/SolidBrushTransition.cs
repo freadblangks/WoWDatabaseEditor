@@ -6,6 +6,7 @@ using Avalonia.Animation.Easings;
 using Avalonia.Media;
 using Avalonia.Reactive;
 using Avalonia.Utilities;
+using WDE.MVVM.Observable;
 
 namespace AvaloniaStyles.Utils
 {
@@ -15,8 +16,7 @@ namespace AvaloniaStyles.Utils
         public override IObservable<IBrush> DoTransition(IObservable<double> progress, IBrush oldValue,
             IBrush newValue)
         {
-            return progress
-                .Select(p =>
+            return Observable.Select(progress, p =>
                 {
                     SolidColorBrush? old = oldValue as SolidColorBrush;
                     SolidColorBrush? nnew = newValue as SolidColorBrush;
@@ -36,7 +36,7 @@ namespace AvaloniaStyles.Utils
     // copy paste of Avalonia Transition class, because I do not know why original doesn't work here...
     public abstract class Transition<T> : AvaloniaObject, ITransition
     {
-        private AvaloniaProperty? _prop;
+        private AvaloniaProperty _prop = null!;
 
         /// <summary>
         /// Gets or sets the duration of the transition.
@@ -54,14 +54,11 @@ namespace AvaloniaStyles.Utils
         public Easing Easing { get; set; } = new LinearEasing();
 
         /// <inheritdocs/>
-        public AvaloniaProperty? Property
+        public AvaloniaProperty Property
         {
-            get { return _prop; }
+            get { return _prop!; }
             set
             {
-                if (value == null)
-                    return;
-                
                 if (!(value.PropertyType.IsAssignableFrom(typeof(T))))
                     throw new InvalidCastException
                         ($"Invalid property type \"{typeof(T).Name}\" for this transition: {GetType().Name}.");
@@ -76,8 +73,10 @@ namespace AvaloniaStyles.Utils
         public abstract IObservable<T> DoTransition(IObservable<double> progress, T oldValue, T newValue);
 
         /// <inheritdocs/>
-        public virtual IDisposable Apply(Animatable control, IClock clock, object oldValue, object newValue)
+        public virtual IDisposable Apply(Animatable control, IClock clock, object? oldValue, object? newValue)
         {
+            if (oldValue == null || newValue == null)
+                return new EmptyDisposable();
             var transition = DoTransition(new TransitionInstance(clock, Delay, Duration), (T) oldValue, (T) newValue);
             return control.Bind<T>((AvaloniaProperty<T>) Property!, transition, Avalonia.Data.BindingPriority.Animation);
         }

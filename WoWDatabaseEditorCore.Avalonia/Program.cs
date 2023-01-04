@@ -9,7 +9,9 @@ using AsyncAwaitBestPractices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.OpenGL;
+#if USE_OPENTK
 using Avalonia.OpenTK;
+#endif
 using Avalonia.ReactiveUI;
 using WDE.Common.Tasks;
 using WoWDatabaseEditorCore.Managers;
@@ -54,6 +56,7 @@ namespace WoWDatabaseEditorCore.Avalonia
                 Directory.SetCurrentDirectory(exePath.Directory.FullName);
         }
 
+#if USE_OPENTK
         private static T SafeUseOpenTK<T>(T builder, IList<GlVersion> probeVersions) where T : AppBuilderBase<T>, new()
         {
             return builder.AfterPlatformServicesSetup(_ =>
@@ -72,6 +75,7 @@ namespace WoWDatabaseEditorCore.Avalonia
                 }
             });
         }
+#endif
         
         // Avalonia configuration, don't remove; also used by visual designer.
         public static AppBuilder BuildAvaloniaApp()

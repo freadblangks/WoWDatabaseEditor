@@ -19,7 +19,7 @@ namespace WoWDatabaseEditorCore.Avalonia.Docking
             Title = tool.Title;
             ViewModel = tool;
             CanFloat = false;
-            CanPin = false;
+            CanPin = true;
             CanClose = true;
         }
 

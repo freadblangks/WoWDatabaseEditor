@@ -36,7 +36,7 @@ namespace WoWDatabaseEditorCore.Avalonia.Views
         {
             AvaloniaXamlLoader.Load(this);
             
-            tools = this.FindControl<ToolsTabControl>("Tools");
+            tools = this.GetControl<ToolsTabControl>("Tools");
             tools.SelectionChanged += OnSelectionChanged;
         }
 

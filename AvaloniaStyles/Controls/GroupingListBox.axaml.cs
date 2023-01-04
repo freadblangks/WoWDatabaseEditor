@@ -127,7 +127,8 @@ namespace AvaloniaStyles.Controls
                 return;
 
             var container = parentItems.ItemContainerGenerator.ContainerFromIndex(index);
-            scroll.Offset = new Vector(0, container.Bounds.Y);
+            if (container != null)
+                scroll.Offset = new Vector(0, container.Bounds.Y);
         }
 
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -153,7 +154,7 @@ namespace AvaloniaStyles.Controls
                 return;
             
             listBox.SelectedIndex = innerIndex;
-            (listBox.ItemContainerGenerator.ContainerFromIndex(listBox.SelectedIndex)).Focus();
+            (listBox.ItemContainerGenerator.ContainerFromIndex(listBox.SelectedIndex))?.Focus();
         }
 
         #region KEYBOARD_NAVIGATION
@@ -180,14 +181,17 @@ namespace AvaloniaStyles.Controls
             {
                 e.Handled = true;
                 var dir = e.Key == Key.Up ? -1 : 1;
-                int itemsInRow = (int)(that.Bounds.Width / ((that.ItemContainerGenerator.ContainerFromIndex(0)).Bounds.Width));
+                var element = that.ItemContainerGenerator.ContainerFromIndex(0);
+                if (element == null)
+                    return;
+                int itemsInRow = (int)(that.Bounds.Width / (element.Bounds.Width));
                 MoveUpDown(that, parent, itemsInRow, dir);
             }   
         }
 
         private ListBox? GetNextParent(ItemsControl parent, ListBox current, int dir)
         {
-            var currentParentIndex = ((IList)parent.Items).IndexOf(current.DataContext);
+            var currentParentIndex = ((IList?)parent.Items)?.IndexOf(current.DataContext) ?? -1;
             var nextParentIndex = currentParentIndex + dir;
             if (nextParentIndex < 0 || nextParentIndex > parent.ItemCount - 1)
                 return null;
@@ -267,7 +271,7 @@ namespace AvaloniaStyles.Controls
         private void SelectIndex(ListBox listbox, int index)
         {
             listbox.SelectedIndex = index;
-            (listbox.ItemContainerGenerator.ContainerFromIndex(listbox.SelectedIndex)).Focus();
+            listbox.ItemContainerGenerator.ContainerFromIndex(listbox.SelectedIndex)?.Focus();
         }
         
         public static T? FindParent<T>(IVisual? obj) where T : Control
@@ -325,7 +329,7 @@ namespace AvaloniaStyles.Controls
                 inEvent = true;
                 {
                     o.CustomSelectedItem = arg.NewValue;
-                    GroupingListBox parent = o.FindAncestorOfType<GroupingListBox>();
+                    GroupingListBox? parent = o.FindAncestorOfType<GroupingListBox>();
                     if (parent != null)
                         parent.SelectedItem = arg.NewValue;
                     o.RaisePropertyChanged(CustomSelectedItemProperty, arg.OldValue, arg.NewValue);

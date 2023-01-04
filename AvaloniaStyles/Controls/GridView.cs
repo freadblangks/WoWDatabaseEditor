@@ -148,7 +148,13 @@ namespace AvaloniaStyles.Controls
             base.OnApplyTemplate(e);
             header = e.NameScope.Find<Grid>("PART_header");
             listBox = e.NameScope.Find<ListBox>("PART_listbox");
-                
+
+            if (header == null)
+                throw new NullReferenceException("Couldn't find PART_header in GridView template");
+            
+            if (listBox == null)
+                throw new NullReferenceException("Couldn't find PART_listbox in GridView template");
+            
             header.ColumnDefinitions.Clear();
             header.Children.Clear();
             SetupGridColumns(header, true);
@@ -333,7 +339,7 @@ namespace AvaloniaStyles.Controls
                     
             var scroll = listBox.FindDescendantOfType<ScrollViewer>();
                     
-            if (index < scroll.Offset.Y || index > scroll.Offset.Y + visible)
+            if (index < scroll!.Offset.Y || index > scroll.Offset.Y + visible)
                 scroll.Offset = new Vector(scroll.Offset.X, Math.Max(0, index - visible / 2));
         }
 
@@ -380,7 +386,7 @@ namespace AvaloniaStyles.Controls
                     IControl control;
                     if (column.DataTemplate is { } dt)
                     {
-                        control = dt.Build(column);
+                        control = dt.Build(column) ?? new TextBlock(){Text = "Couldn't instantiate column"};
                     } 
                     else if (column.Checkable)
                     {

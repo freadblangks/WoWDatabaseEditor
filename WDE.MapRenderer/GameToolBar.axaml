@@ -30,10 +30,10 @@
         <ToggleButton ToolTip.Tip="Toggle map chunk visibility" IsChecked="{CompiledBinding ShowGrid, Mode=TwoWay}">
             <WdeImage ImageUri="Icons/icon_grid.png" />
         </ToggleButton>
-        <DropDownButton>
-            <DropDownButton.Button>
+        <WdeDropDownButton>
+            <WdeDropDownButton.Button>
                 <WdeImage ImageUri="Icons/icon_day_night.png" />
-            </DropDownButton.Button>
+            </WdeDropDownButton.Button>
             <StackPanel Orientation="Vertical" Width="400">
                 <CheckBox Name="TimeFlow" IsChecked="{CompiledBinding DisableTimeFlow, Mode=TwoWay}">Disable time flow</CheckBox>
                 <DockPanel LastChildFill="True" IsEnabled="{Binding #TimeFlow.IsChecked, Converter={x:Static InverseBoolConverter.Instance}}">
@@ -59,6 +59,6 @@
                     <Slider TickFrequency="1" IsSnapToTickEnabled="True" Minimum="0" Maximum="6" SmallChange="1" LargeChange="1" Value="{CompiledBinding TextureQuality}" />
                 </DockPanel>
             </StackPanel>
-        </DropDownButton>
+        </WdeDropDownButton>
     </ToolbarPanel>
 </UserControl>

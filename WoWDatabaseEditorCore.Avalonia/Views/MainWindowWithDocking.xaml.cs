@@ -39,7 +39,7 @@ namespace WoWDatabaseEditorCore.Avalonia.Views
         
         public static bool GetOnEnterPressed(IAvaloniaObject obj)
         {
-            return obj.GetValue(OnEnterPressedProperty);
+            return (bool?)obj.GetValue(OnEnterPressedProperty) ?? false;
         }
 
         public static void SetOnEnterPressed(IAvaloniaObject obj, bool value)
@@ -104,7 +104,7 @@ namespace WoWDatabaseEditorCore.Avalonia.Views
         {
             AvaloniaXamlLoader.Load(this);
             
-            DockControl dock = this.FindControl<DockControl>("DockControl");
+            DockControl dock = this.GetControl<DockControl>("DockControl");
 
             SerializedDock? serializedDock = null;
             if (fileSystem.Exists(DockSettingsFile))

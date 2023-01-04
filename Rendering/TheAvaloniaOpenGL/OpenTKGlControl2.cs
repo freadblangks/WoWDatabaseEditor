@@ -1,3 +1,4 @@
+#if USE_OPENTK
 using Avalonia.OpenGL.Controls;
 using Avalonia.OpenTK;
 
@@ -26,3 +27,4 @@ namespace TheAvaloniaOpenGL
         }
     }
 }
+#endif

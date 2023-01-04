@@ -185,15 +185,14 @@ namespace AvaloniaStyles.Controls
             if (!e.Handled && e.Text != "\n" && e.Text != "\r")
             {
                 IsDropDownOpen = true;
-                SearchTextBox.RaiseEvent(new TextInputEventArgs
-                {
-                    Device = e.Device,
-                    Handled = false,
-                    Text = e.Text,
-                    Route = e.Route,
-                    RoutedEvent = e.RoutedEvent,
-                    Source = SearchTextBox
-                });
+                TextInputEventArgs args = Activator.CreateInstance<TextInputEventArgs>();
+                args.Device = e.Device;
+                args.Handled = false;
+                args.Text = e.Text;
+                args.Route = e.Route;
+                args.RoutedEvent = e.RoutedEvent;
+                args.Source = SearchTextBox;
+                SearchTextBox.RaiseEvent(args);
                 e.Handled = true;
             }
         }
@@ -221,7 +220,7 @@ namespace AvaloniaStyles.Controls
                             return;
                         
                         box.SearchTextBox.Text = "";
-                        FocusManager.Instance.Focus(box.SearchTextBox, NavigationMethod.Pointer);
+                        FocusManager.Instance?.Focus(box.SearchTextBox, NavigationMethod.Pointer);
                         box.SearchTextBox.SelectionEnd = box.SearchTextBox.SelectionStart = box.SearchTextBox.Text.Length;
                     }, TimeSpan.FromMilliseconds(16));
 
@@ -237,11 +236,11 @@ namespace AvaloniaStyles.Controls
         
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
-            SearchTextBox = e.NameScope.Find<TextBox>("PART_SearchTextBox");
+            SearchTextBox = e.NameScope.Find<TextBox>("PART_SearchTextBox") ?? throw new NullReferenceException("Couldn't find PART_SearchTextBox");
 
-            ToggleButton = e.NameScope.Find<ToggleButton>("PART_Button");
+            ToggleButton = e.NameScope.Find<ToggleButton>("PART_Button") ?? throw new NullReferenceException("Couldn't find PART_Button");
             
-            ListBox = e.NameScope.Find<ListBox>("PART_SelectingItemsControl");
+            ListBox = e.NameScope.Find<ListBox>("PART_SelectingItemsControl") ?? throw new NullReferenceException("Couldn't find PART_SelectingItemsControl");
             ListBox.PointerReleased += OnSelectorPointerReleased;
             if (ListBox != null)
             {
@@ -274,7 +273,7 @@ namespace AvaloniaStyles.Controls
             Dispatcher.UIThread.Post(() =>
             {
                 // Call the central updated text method as a user-initiated action
-                TextUpdated(textBox.Text);
+                TextUpdated(textBox.Text ?? "");
             });
         }
         
@@ -335,7 +334,7 @@ namespace AvaloniaStyles.Controls
 
                                     if (args.Key == Key.Enter)
                                     {
-                                        var enterArgs = new EnterPressedArgs(textBox.Text,
+                                        var enterArgs = new EnterPressedArgs(textBox.Text ?? "",
                                             SelectionAdapter.SelectedItem);
                                         OnEnterPressed?.Invoke(this, enterArgs);
                                         if (!enterArgs.Handled)
@@ -378,7 +377,7 @@ namespace AvaloniaStyles.Controls
                                 // don't ever let textbox lost focus
                                 if (IsDropDownOpen)
                                 {
-                                    Dispatcher.UIThread.Post(() => FocusManager.Instance.Focus(textBox));
+                                    Dispatcher.UIThread.Post(() => FocusManager.Instance?.Focus(textBox));
                                 }
                             }));
                 }
@@ -396,7 +395,7 @@ namespace AvaloniaStyles.Controls
         private void Close()
         {
             IsDropDownOpen = false;
-            FocusManager.Instance.Focus(ToggleButton, NavigationMethod.Tab);
+            FocusManager.Instance?.Focus(ToggleButton, NavigationMethod.Tab);
             Closed?.Invoke();
         }
         

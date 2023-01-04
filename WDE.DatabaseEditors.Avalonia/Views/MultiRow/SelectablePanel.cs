@@ -67,7 +67,8 @@ namespace WDE.DatabaseEditors.Avalonia.Views.MultiRow
         public void Select()
         {
             var parent = this.FindAncestorOfType<ItemsControl>();
-            SetSelectedItem(parent, DataContext);
+            if (parent != null)
+                SetSelectedItem(parent, DataContext);
         }
 
         private static void HandlePointerPressed(SelectablePanel panel, PointerPressedEventArgs args)
@@ -87,7 +88,7 @@ namespace WDE.DatabaseEditors.Avalonia.Views.MultiRow
 
         public static bool GetObserveItems(IAvaloniaObject obj)
         {
-            return (bool)obj.GetValue(ObserveItemsProperty);
+            return (bool?)obj.GetValue(ObserveItemsProperty) ?? false;
         }
 
         public static void SetObserveItems(IAvaloniaObject obj, bool value)

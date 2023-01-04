@@ -53,8 +53,8 @@ namespace WoWDatabaseEditorCore.Avalonia.Services.ItemFromListSelectorService
         {
             if (e.Key == Key.Down)
             {
-                GridView gridView = this.FindControl<GridView>("GridView");
-                if (gridView == null || gridView.ListBoxImpl == null)
+                GridView gridView = this.GetControl<GridView>("GridView");
+                if (gridView.ListBoxImpl == null)
                     return;
 
                 if (gridView.ListBoxImpl.SelectedItem == null)

@@ -25,9 +25,7 @@ namespace WoWDatabaseEditorCore.Avalonia.Services.CreatureEntrySelectorService
         {
             if (e.Key == Key.Down)
             {
-                GridView gridView = this.FindControl<GridView>("GridView");
-                if (gridView == null)
-                    return;
+                GridView gridView = this.GetControl<GridView>("GridView");
 
                 if (gridView.ListBoxImpl != null)
                 {

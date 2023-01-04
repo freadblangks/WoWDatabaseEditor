@@ -31,7 +31,7 @@ namespace WDE.Common.Avalonia.Controls
 
         public void Execute(object? parameter)
         {
-            if (FocusManager.Instance.Current is TextBox tb)
+            if (FocusManager.Instance?.Current is TextBox tb)
             {
                 var ev = Activator.CreateInstance<KeyEventArgs>();
                 ev.Key = Gesture.Key;

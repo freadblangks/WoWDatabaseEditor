@@ -29,6 +29,8 @@ public class ToolbarControl : TemplatedControl, IPanel
     {
         base.OnApplyTemplate(e);
         childrenHost = e.NameScope.Find<Panel>("PART_ChildrenHost");
+        if (childrenHost == null)
+            throw new NullReferenceException("Couldn't find PART_ChildrenHost in ToolbarControl Template");
         foreach (var child in Children)
             childrenHost.Children.Add(child);
     }
@@ -58,7 +60,7 @@ public class ToolbarControl : TemplatedControl, IPanel
                 {
                     int index2 = index1 + e.OldStartingIndex;
                     IControl? newItem = (IControl?) e.NewItems![index1];
-                    if (childrenHost != null)
+                    if (childrenHost != null && newItem != null)
                         childrenHost.Children[index2] = newItem;
                 }
                 break;

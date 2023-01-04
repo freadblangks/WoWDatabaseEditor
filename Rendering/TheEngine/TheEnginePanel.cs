@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -16,6 +17,7 @@ using MouseButton = TheEngine.Input.MouseButton;
 using TheEngine.Utils;
 using TheMaths;
 
+[assembly: InternalsVisibleTo("RenderingTester")]
 namespace TheEngine
 {
 #if USE_OPENTK
@@ -46,11 +48,7 @@ namespace TheEngine
             framerate.Add(delta);
         }
 
-        public TheEnginePanel() : base(new OpenGlControlSettings
-        {
-            ContinuouslyRender = true,
-            //DeInitializeOnVisualTreeDetachment = false,
-        })
+        public TheEnginePanel() : base()
         {
             Focusable = true;
         }
@@ -129,7 +127,7 @@ namespace TheEngine
 #if DEBUG && DEBUG_OPENGL
                 device = new DebugDevice(device);
 #endif
-                engine = new Engine(device, new Configuration(), this, true);
+                engine = new Engine(device, new Configuration(), this, false);
 #else
                 IDevice device;
                 var real = new RealDevice(gl);
@@ -138,7 +136,7 @@ namespace TheEngine
 #else
                 device = new RealDeviceWrapper(real);
 #endif
-                engine = new Engine(device, new Configuration(), this, true);
+                engine = new Engine(device, new Configuration(), this, false);
 #endif
             }
             catch (Exception e)
@@ -160,7 +158,7 @@ namespace TheEngine
         {
             if (delayedDispose)
             {
-                Cleanup();
+                DoCleanup();
                 delayedDispose = false;
                 return;
             }
@@ -325,7 +323,7 @@ namespace TheEngine
 
         public void Dispose()
         {
-            Cleanup();
+            DoCleanup();
         }
     }
 }

@@ -30,7 +30,7 @@ public class TablesListToolView : UserControl
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-        TablesListBox = this.FindControl<ListBox>("TablesListBox");
+        TablesListBox = this.GetControl<ListBox>("TablesListBox");
         SelectionAdapter = new SelectingItemsControlSelectionAdapter(TablesListBox);
         DispatcherTimer.RunOnce(() =>
         {

@@ -25,7 +25,7 @@ public class SpawnsToolView : UserControl
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
-        spawns = this.FindControl<SpawnsFastTreeList>("SpawnsList");
+        spawns = this.GetControl<SpawnsFastTreeList>("SpawnsList");
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -43,11 +43,11 @@ public class SpawnsToolView : UserControl
     private void OnFocusRequest()
     {
         var root = this.GetVisualRoot();
-        var panel = root.FindDescendantOfType<TheEnginePanel>();
+        var panel = root?.FindDescendantOfType<TheEnginePanel>();
         
         Dispatcher.UIThread.Post(() =>
         {
-            FocusManager.Instance.Focus(panel, NavigationMethod.Tab);
+            FocusManager.Instance?.Focus(panel, NavigationMethod.Tab);
         }, DispatcherPriority.Render);
     }
 

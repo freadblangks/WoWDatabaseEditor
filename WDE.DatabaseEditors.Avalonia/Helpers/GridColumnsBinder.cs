@@ -13,7 +13,7 @@ namespace WDE.DatabaseEditors.Avalonia.Helpers
 
         public static ObservableCollection<DatabaseColumnHeaderViewModel> GetColumns(IAvaloniaObject obj)
         {
-            return obj.GetValue(ColumnsProperty);
+            return (ObservableCollection<DatabaseColumnHeaderViewModel>?)obj.GetValue(ColumnsProperty) ?? new ObservableCollection<DatabaseColumnHeaderViewModel>();
         }
 
         public static void SetColumns(IAvaloniaObject obj, ObservableCollection<DatabaseColumnHeaderViewModel> value)
@@ -25,7 +25,7 @@ namespace WDE.DatabaseEditors.Avalonia.Helpers
 
         public static ObservableCollection<DatabaseColumnHeaderViewModel> GetColumnsWithHeader(IAvaloniaObject obj)
         {
-            return obj.GetValue(ColumnsWithHeaderProperty);
+            return (ObservableCollection<DatabaseColumnHeaderViewModel>?)obj.GetValue(ColumnsWithHeaderProperty) ?? new ObservableCollection<DatabaseColumnHeaderViewModel>();
         }
 
         public static void SetColumnsWithHeader(IAvaloniaObject obj, ObservableCollection<DatabaseColumnHeaderViewModel> value)

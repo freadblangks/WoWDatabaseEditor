@@ -162,6 +162,8 @@ namespace AvaloniaStyles.Controls
                 scaling = SystemTheme.CustomScalingValue.Value;
             
             var impl = window.PlatformImpl;
+            if (impl == null)
+                return;
             var f = impl.GetType().GetField("_scaling", BindingFlags.Instance | BindingFlags.NonPublic);
             if (f != null)
             {
@@ -171,7 +173,7 @@ namespace AvaloniaStyles.Controls
                     var oldWidth = window.Width * curVal;
                     var oldHeight = window.Height * curVal;
                     f.SetValue(impl, scaling);
-                    impl.ScalingChanged(scaling);
+                    impl.ScalingChanged?.Invoke(scaling);
                     DispatcherTimer.RunOnce(() =>
                     {
                         window.Width = oldWidth / scaling;

@@ -30,7 +30,7 @@ public class RecyclableViewList
         IControl control;
         if (counter >= controls.Count)
         {
-            control = template!.Build(null!);
+            control = template!.Build(null!)!;
             controls.Add(control);
             control.DataContext = context;
             if (behind)

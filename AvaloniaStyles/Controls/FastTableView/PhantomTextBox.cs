@@ -144,7 +144,7 @@ public class PhantomTextBox : PhantomControlBase<TextBox>
 
     protected override void Save(TextBox element)
     {
-        currentOnApply?.Invoke(element.Text);
+        currentOnApply?.Invoke(element.Text ?? "");
     }
 }
 

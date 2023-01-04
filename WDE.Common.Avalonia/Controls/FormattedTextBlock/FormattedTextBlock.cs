@@ -35,7 +35,7 @@ namespace WDE.Common.Avalonia.Controls
             // this probably will be removed
             // when avalonia has support for "RUN"
             drawer = new FormattedTextDrawer();
-            if (!Application.Current.Styles.TryGetResource("MainFontSans", out var mainFontSans)
+            if (!Application.Current!.Styles.TryGetResource("MainFontSans", out var mainFontSans)
                 || mainFontSans is not FontFamily mainFontSansFamily)
                 return;
             
@@ -79,9 +79,9 @@ namespace WDE.Common.Avalonia.Controls
             InvalidateVisual();
         }
 
-        protected override void OnPointerLeave(PointerEventArgs e)
+        protected override void OnPointerExited(PointerEventArgs e)
         {
-            base.OnPointerLeave(e);
+            base.OnPointerExited(e);
             currentPos = new Point(-100, -100);
             InvalidateVisual();
         }

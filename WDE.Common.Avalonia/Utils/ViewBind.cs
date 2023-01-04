@@ -18,11 +18,11 @@ namespace WDE.Common.Avalonia.Utils
             return ContainerProvider.Resolve<T>();
         }
         
-        public static readonly AvaloniaProperty ModelProperty = AvaloniaProperty.RegisterAttached<Control, object>("Model",
+        public static readonly AvaloniaProperty ModelProperty = AvaloniaProperty.RegisterAttached<Control, object?>("Model",
             typeof(ViewBind),coerce: OnModelChanged);
         
-        public static object GetModel(Control control) => control.GetValue(ModelProperty);
-        public static void SetModel(Control control, object value) => control.SetValue(ModelProperty, value);
+        public static object? GetModel(Control control) => control.GetValue(ModelProperty);
+        public static void SetModel(Control control, object? value) => control.SetValue(ModelProperty, value);
         
         public static bool TryResolve(object viewModel, out object? view)
         {
@@ -33,9 +33,11 @@ namespace WDE.Common.Avalonia.Utils
             return view != null;
         }
         
-        private static object OnModelChanged(IAvaloniaObject targetLocation, object viewModel)
+        private static object? OnModelChanged(IAvaloniaObject targetLocation, object? viewModel)
         {
-            if (TryResolve(viewModel, out var view))
+            if (viewModel == null)
+                SetContentProperty(targetLocation, new TextBlock(){Text = "Null model"});
+            else if (TryResolve(viewModel, out var view))
                 SetContentProperty(targetLocation, view);
             else
                 SetContentProperty(targetLocation, new Panel());
@@ -57,7 +59,7 @@ namespace WDE.Common.Avalonia.Utils
     public class ToolbarDataTemplate : IDataTemplate
     {
         public static IDataTemplate Template { get; } = new ToolbarDataTemplate();
-        public IControl Build(object param)
+        public IControl Build(object? param)
         {
             if (ViewBind.AppViewLocator != null && param != null &&
                 ViewBind.AppViewLocator.TryResolveToolBar(param.GetType(), out var toolbarType))
@@ -75,7 +77,7 @@ namespace WDE.Common.Avalonia.Utils
             return new Control();
         }
 
-        public bool Match(object data)
+        public bool Match(object? data)
         {
             return data is not IControl && data is not string;
         }
@@ -84,7 +86,7 @@ namespace WDE.Common.Avalonia.Utils
     public class ViewDataTemplate : IDataTemplate
     {
         public static IDataTemplate Template { get; } = new ViewDataTemplate();
-        public IControl Build(object param)
+        public IControl Build(object? param)
         {
             if (ViewBind.AppViewLocator != null && param != null &&
                 ViewBind.AppViewLocator.TryResolve(param.GetType(), out var viewType))
@@ -102,7 +104,7 @@ namespace WDE.Common.Avalonia.Utils
             return new Control();
         }
 
-        public bool Match(object data)
+        public bool Match(object? data)
         {
             return data is not IControl && data is not string;
         }

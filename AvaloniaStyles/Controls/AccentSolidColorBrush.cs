@@ -3,6 +3,7 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Avalonia.Metadata;
 using AvaloniaStyles.Utils;
+using HslColor = AvaloniaStyles.Utils.HslColor;
 
 namespace AvaloniaStyles.Controls;
 

@@ -24,7 +24,7 @@ namespace WDE.Common.Avalonia.Components
         
         public ImageUri Image
         {
-            get => (ImageUri) GetValue(ImageProperty);
+            get => (ImageUri?) GetValue(ImageProperty) ?? new ImageUri("");
             set => SetValue(ImageProperty, value);
         }
 

@@ -19,12 +19,12 @@ namespace WoWDatabaseEditorCore.Avalonia.Docking
         private Dictionary<IDocument, IControl> documents = new();
         private Dictionary<ITool, IControl> tools = new();
 
-        public bool Match(object data)
+        public bool Match(object? data)
         {
             return data is AvaloniaDocumentDockWrapper || data is AvaloniaToolDockWrapper;
         }
 
-        public IControl Build(object data, IControl? existing)
+        public IControl Build(object? data, IControl? existing)
         {
             Bind();
             if (data is AvaloniaDocumentDockWrapper documentDockWrapper)
@@ -67,7 +67,7 @@ namespace WoWDatabaseEditorCore.Avalonia.Docking
             return new Panel();
         }
 
-        public IControl Build(object data)
+        public IControl Build(object? data)
         {
             Bind();
             return Build(data, null);

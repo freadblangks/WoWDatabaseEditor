@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Controls.Templates;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml.Templates;
@@ -85,7 +86,7 @@ namespace WDE.SmartScriptEditor.Avalonia.Editor.UserControls
         public SmartEventFlagsView()
         {
             flagsMapping = ViewBind.ResolveViewModel<SmartEventFlagMapping>();
-            if (Application.Current.Styles.TryGetResource("SmartScripts.Event.Flag.Foreground", out var eventFlagForegroundColor)
+            if (Application.Current!.Styles.TryGetResource("SmartScripts.Event.Flag.Foreground", out var eventFlagForegroundColor)
                 && eventFlagForegroundColor is IBrush eventFlagForegroundBrush)
             {
                 foreground = eventFlagForegroundBrush;
@@ -117,7 +118,7 @@ namespace WDE.SmartScriptEditor.Avalonia.Editor.UserControls
             if (char.IsAscii(symbol[0]))
                 context.DrawRectangle(new SolidColorBrush(Color.Parse("#1976d2")), null, new Rect(data.x, data.y, BoxSize, BoxSize), BoxSize / 2, BoxSize / 2);
             
-            var tl = new TextLayout(symbol, new Typeface(GetValue(TextBlock.FontFamilyProperty)), FontSize, foreground, TextAlignment.Center, maxWidth: BoxSize);
+            var tl = new TextLayout(symbol, new Typeface(GetValue(TextElement.FontFamilyProperty)), FontSize, foreground, TextAlignment.Center, maxWidth: BoxSize);
             tl.Draw(context, new Point(data.x, data.y + 1));
             
             data.x -= BoxSize + Spacing;
@@ -373,14 +374,14 @@ namespace WDE.SmartScriptEditor.Avalonia.Editor.UserControls
         [TemplateContent]
         public object? FlagView { get; set; }
         
-        public IControl Build(object param)
+        public IControl Build(object? param)
         {
             if (param is SmartEventFlagsView.IconViewModel {IsPhaseFlag: true})
                 return TemplateContent.Load(PhaseView).Control;
             return TemplateContent.Load(FlagView).Control;
         }
 
-        public bool Match(object data)
+        public bool Match(object? data)
         {
             return true;
         }

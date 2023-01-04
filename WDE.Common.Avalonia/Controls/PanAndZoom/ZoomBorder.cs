@@ -1111,7 +1111,7 @@ namespace WDE.WorldMap.PanAndZoom
 
         bool ILogicalScrollable.IsLogicalScrollEnabled => true;
 
-        event EventHandler ILogicalScrollable.ScrollInvalidated
+        event EventHandler? ILogicalScrollable.ScrollInvalidated
         {
             add => _scrollInvalidated += value;
             remove => _scrollInvalidated -= value;
@@ -1126,7 +1126,7 @@ namespace WDE.WorldMap.PanAndZoom
             return false;
         }
 
-        IControl? ILogicalScrollable.GetControlInDirection(NavigationDirection direction, IControl from)
+        IControl? ILogicalScrollable.GetControlInDirection(NavigationDirection direction, IControl? from)
         {
             return null;
         }

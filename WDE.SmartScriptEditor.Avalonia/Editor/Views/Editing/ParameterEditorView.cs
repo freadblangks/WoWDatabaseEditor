@@ -51,7 +51,7 @@ namespace WDE.SmartScriptEditor.Avalonia.Editor.Views.Editing
 
         public static bool GetOnEnterPressed(IAvaloniaObject obj)
         {
-            return obj.GetValue(OnEnterPressedProperty);
+            return (bool?)obj.GetValue(OnEnterPressedProperty) ?? false;
         }
 
         public static void SetOnEnterPressed(IAvaloniaObject obj, bool value)

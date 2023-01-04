@@ -1896,6 +1896,7 @@ namespace WDE.SmartScriptEditor.Editor.ViewModels
                 e => e.Id,
                 (e, id) => smartFactory.UpdateTarget(e, id), bulkEdit);
             
+            this.preferences.
             editableGroup.Add("Source", actionsToEdit.Select(a => a.Source).ToList(), originalActions.Select(a => a.Source).ToList());
             var firstSourceParameter = editableGroup.Parameters[^actionsToEdit[0].Source.ParametersCount];
             editableGroup.Add("Action", actionsToEdit, originalActions);

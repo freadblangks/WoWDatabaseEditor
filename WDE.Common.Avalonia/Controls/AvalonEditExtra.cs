@@ -16,7 +16,7 @@ namespace WDE.Common.Avalonia.Controls
 
         public static string GetSyntax(IAvaloniaObject obj)
         {
-            return obj.GetValue(SyntaxProperty);
+            return (string?)obj.GetValue(SyntaxProperty) ?? "";
         }
 
         public static void SetSyntax(IAvaloniaObject obj, string value)
@@ -29,7 +29,7 @@ namespace WDE.Common.Avalonia.Controls
 
         public static string GetSyntaxExtension(IAvaloniaObject obj)
         {
-            return obj.GetValue(SyntaxExtensionProperty);
+            return (string?)obj.GetValue(SyntaxExtensionProperty) ?? "";
         }
 
         public static void SetSyntaxExtension(IAvaloniaObject obj, string value)

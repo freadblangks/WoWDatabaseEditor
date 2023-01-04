@@ -27,7 +27,7 @@ public class SmartGroupEditView : UserControl
         base.OnAttachedToVisualTree(e);
         DispatcherTimer.RunOnce(() =>
         {
-            var edit = this.FindControl<TextBox>("GroupName");
+            var edit = this.GetControl<TextBox>("GroupName");
             edit.SelectAll();
             edit.Focus();
         }, TimeSpan.FromMilliseconds(1));

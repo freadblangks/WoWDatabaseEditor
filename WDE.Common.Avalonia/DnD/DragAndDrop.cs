@@ -29,7 +29,7 @@ namespace WDE.Common.Avalonia.DnD
 
         public static bool GetIsDropTarget(IAvaloniaObject obj)
         {
-            return (bool) obj.GetValue(IsDropTargetProperty);
+            return (bool?) obj.GetValue(IsDropTargetProperty) ?? false;
         }
 
         public static void SetIsDropTarget(IAvaloniaObject obj, bool value)
@@ -39,7 +39,7 @@ namespace WDE.Common.Avalonia.DnD
 
         public static bool GetIsDragSource(IAvaloniaObject obj)
         {
-            return (bool) obj.GetValue(IsDragSourceProperty);
+            return (bool?) obj.GetValue(IsDragSourceProperty) ?? false;
         }
 
         public static void SetIsDragSource(IAvaloniaObject obj, bool value)
@@ -76,7 +76,7 @@ namespace WDE.Common.Avalonia.DnD
 
         static DragAndDrop()
         {
-            platformCopyKeyModifier = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>().CommandModifiers;
+            platformCopyKeyModifier = AvaloniaLocator.Current?.GetService<PlatformHotkeyConfiguration>()?.CommandModifiers ?? KeyModifiers.Control;
             adorner = new AdornerHelper();
             IsDropTargetProperty.Changed.Subscribe(args =>
             {
@@ -144,7 +144,7 @@ namespace WDE.Common.Avalonia.DnD
                 return;
             
             var dragHandler = GetDragHandler(treeView);
-            if (dragHandler != null && !dragHandler.CanDrag(treeView.SelectedItem))
+            if (treeView.SelectedItem == null || dragHandler != null && !dragHandler.CanDrag(treeView.SelectedItem))
                 return;
             
             dragging = true;
@@ -290,11 +290,11 @@ namespace WDE.Common.Avalonia.DnD
                 double mousePosY = e.GetPosition(listBox).Y;
                 if (mousePosY < 10)
                 {
-                    listBox.Scroll.Offset = listBox.Scroll.Offset + new Vector(0, -1);
+                    listBox.Scroll!.Offset = listBox.Scroll.Offset + new Vector(0, -1);
                 }
                 else if (mousePosY > listBox.Bounds.Height - 10)
                 {
-                    listBox.Scroll.Offset = listBox.Scroll.Offset + new Vector(0, +1);
+                    listBox.Scroll!.Offset = listBox.Scroll.Offset + new Vector(0, +1);
                 }
             }
             
@@ -388,11 +388,11 @@ namespace WDE.Common.Avalonia.DnD
                 double mousePosY = e.GetPosition(listBox).Y;
                 if (mousePosY < 10)
                 {
-                    listBox.ListBoxImpl!.Scroll.Offset = listBox.ListBoxImpl!.Scroll.Offset + new Vector(0, -1);
+                    listBox.ListBoxImpl!.Scroll!.Offset = listBox.ListBoxImpl!.Scroll.Offset + new Vector(0, -1);
                 }
                 else if (mousePosY > listBox.Bounds.Height - 10)
                 {
-                    listBox.ListBoxImpl!.Scroll.Offset = listBox.ListBoxImpl!.Scroll.Offset + new Vector(0, +1);
+                    listBox.ListBoxImpl!.Scroll!.Offset = listBox.ListBoxImpl!.Scroll.Offset + new Vector(0, +1);
                 }
             }
             
@@ -474,7 +474,7 @@ namespace WDE.Common.Avalonia.DnD
             
             if (dropElement != null)
             {
-                var header = dropElement.GetVisualChildren().FirstOrDefault().GetVisualChildren().FirstOrDefault();
+                var header = dropElement.GetVisualChildren().FirstOrDefault()?.GetVisualChildren().FirstOrDefault();
                 var height = header?.Bounds.Height ?? dropElement.Bounds.Height;
                 
                 var rel = e.GetPosition(dropElement).Y / height;
@@ -495,7 +495,7 @@ namespace WDE.Common.Avalonia.DnD
             {
                 indexOfDrop = 0;
                 insertPosition = RelativeInsertPosition.BeforeTargetItem;
-                dropElement = (TreeViewItem) dropElement.ItemContainerGenerator.ContainerFromIndex(0);
+                dropElement = (TreeViewItem?) dropElement.ItemContainerGenerator.ContainerFromIndex(0);
             }
             
             dropInfo = new DropInfo(dragInfo.Value.draggedElement[0]!)
@@ -652,7 +652,7 @@ namespace WDE.Common.Avalonia.DnD
                     drawRect = new Rect(container.Bounds.X, container.Bounds.Bottom, container.Bounds.Width, 1);
             }
 
-            drawRect = new Rect(drawRect.X, drawRect.Y - (listBox.VirtualizationMode == ItemVirtualizationMode.None ? listBox.Scroll.Offset.Y : 0), drawRect.Width, drawRect.Height);
+            drawRect = new Rect(drawRect.X, drawRect.Y - (listBox.VirtualizationMode == ItemVirtualizationMode.None ? listBox.Scroll!.Offset.Y : 0), drawRect.Width, drawRect.Height);
             
             InvalidateVisual();
         }
@@ -686,7 +686,7 @@ namespace WDE.Common.Avalonia.DnD
                     parent = parent.VisualParent;
                 }
                 
-                var header = container.GetVisualChildren().FirstOrDefault().GetVisualChildren().FirstOrDefault();
+                var header = container.GetVisualChildren().FirstOrDefault()?.GetVisualChildren().FirstOrDefault();
                 var height = header?.Bounds.Height ?? container.Bounds.Height;
                 
                 double top = container.TranslatePoint(new Point(0, 0), treeView)?.Y ?? 0;

@@ -159,7 +159,7 @@
             </Border>
             <ScrollViewer HorizontalScrollBarVisibility="Auto" AllowAutoHide="False">
                 <fastTableView:VeryFastTableView
-                    TextBlock.FontFamily="Consolas,Menlo,Courier,Courier New"
+                    TextElement.FontFamily="Consolas,Menlo,Courier,Courier New"
                     SelectedRowIndex="{CompiledBinding FocusedRowIndex}"
                     SelectedCellIndex="{CompiledBinding FocusedCellIndex}"
                     HiddenColumns="{CompiledBinding HiddenColumns}"

@@ -191,7 +191,7 @@ namespace WDE.DatabaseEditors.Avalonia.Controls
         {
             if (MoveLeft(args.Key, args.KeyModifiers, leftRight) || MoveRight(args.Key, args.KeyModifiers, leftRight))
             {
-                var wrapper = (this.GetVisualParent().GetVisualParent().GetVisualParent() as ContentPresenter) ?? this.GetVisualParent() as ContentPresenter;
+                var wrapper = (this.GetVisualParent()?.GetVisualParent()?.GetVisualParent() as ContentPresenter) ?? this.GetVisualParent() as ContentPresenter;
 
                 var itemsPresenter = wrapper?.FindAncestorOfType<ItemsPresenter>();
                 if (itemsPresenter == null)
@@ -209,7 +209,7 @@ namespace WDE.DatabaseEditors.Avalonia.Controls
                 if (next != null)
                 {
                     EndEditing();
-                    FocusManager.Instance.Focus(next, NavigationMethod.Tab);
+                    FocusManager.Instance?.Focus(next, NavigationMethod.Tab);
                     args.Handled = true;
                 }
             }
@@ -245,7 +245,7 @@ namespace WDE.DatabaseEditors.Avalonia.Controls
                     return;
                 
                 this.EndEditing();
-                FocusManager.Instance.Focus(newCell, NavigationMethod.Tab);
+                FocusManager.Instance?.Focus(newCell, NavigationMethod.Tab);
                 args.Handled = true;
             }
         }

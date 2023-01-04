@@ -14,33 +14,33 @@ namespace WDE.Common.Avalonia.Controls
 
         public void AddStyle(int index, Typeface fontFamily, int fontSize, IBrush color, int yoffset)
         {
-            cache.AddStyle(index, fontFamily, fontSize);
+            cache.AddStyle(index, fontFamily, fontSize, color);
             styles[index] = (color, new Pen(color), yoffset);
         }
         
         public (bool, Rect) Draw(DrawingContext context, string text, int styleId, bool canWrap, ref double x, ref double y, double leftPadding, double maxX)
         {
             var ft = cache.GetFormattedText(text, styleId);
-            lineHeight = Math.Max(lineHeight, ft.Bounds.Height);
+            lineHeight = Math.Max(lineHeight, ft.Height);
 
             if (!styles.TryGetValue(styleId, out var style))
                 return (false, Rect.Empty);
 
             bool wrapped = false;
 
-            if (canWrap && x + ft.Bounds.Width > maxX)
+            if (canWrap && x + ft.Width > maxX)
             {
                 x = leftPadding;
                 y += lineHeight;
                 wrapped = true;
             }
             
-            double alignedY = y + (lineHeight - ft.Bounds.Height);
+            double alignedY = y + (lineHeight - ft.Height);
             
-            context.DrawText(style.brush, new Point(x, alignedY + style.yoffset), ft);
+            context.DrawText(ft, new Point(x, alignedY + style.yoffset));
 
             double startX = x;
-            x += ft.Bounds.Width;
+            x += ft.Width;
 
             return (wrapped, new Rect(startX, y, x - startX, lineHeight));
         }
@@ -56,10 +56,10 @@ namespace WDE.Common.Avalonia.Controls
         public (bool wasWrapped, Rect bounds) Measure(string text, int styleId, bool canWrap, ref double x, ref double y, double maxX)
         {
             var ft = cache.GetFormattedText(text, styleId);
-            lineHeight = Math.Max(lineHeight, ft.Bounds.Height);
+            lineHeight = Math.Max(lineHeight, ft.Height);
 
             bool wrapped = false;
-            if (canWrap && x + ft.Bounds.Width > maxX)
+            if (canWrap && x + ft.Width > maxX)
             {
                 x = 0;
                 y += lineHeight;
@@ -67,9 +67,9 @@ namespace WDE.Common.Avalonia.Controls
             }
             
             double startX = x;
-            x += ft.Bounds.Width;
+            x += ft.Width;
             
-            return (wrapped, new Rect(startX, y, ft.Bounds.Width, lineHeight));
+            return (wrapped, new Rect(startX, y, ft.Width, lineHeight));
         }
     }
 }

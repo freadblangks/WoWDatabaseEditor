@@ -1,7 +1,9 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
@@ -25,14 +27,14 @@ public partial class VeryFastTableView
         if (Rows == null)
             return;
 
-        var font = new Typeface(TextBlock.GetFontFamily(this));
+        var font = new Typeface(TextElement.GetFontFamily(this));
         
         var actualWidth = Bounds.Width;
 
         var scrollViewer = this.FindAncestorOfType<ScrollViewer>();
 
         // determine the first and last visible row
-        var startIndex = Math.Max(0, (int)(scrollViewer.Offset.Y / RowHeight) - 1);
+        var startIndex = Math.Max(0, (int)(scrollViewer!.Offset.Y / RowHeight) - 1);
         var endIndex = Math.Min(startIndex + scrollViewer.Viewport.Height / RowHeight + 2, Rows.Count);
 
         double y = startIndex * RowHeight + DrawingStartOffsetY;
@@ -89,19 +91,16 @@ public partial class VeryFastTableView
                         var text = cell.ToString();
                         if (!string.IsNullOrEmpty(text))
                         {
-                            var ft = new FormattedText
-                            {
-                                Text = text,
-                                Constraint = new Size(rect.Width, RowHeight),
-                                Typeface = font,
-                                FontSize = 12
-                            };
+                            var ft = new FormattedText(
+                                text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, font, 12, textColor);
+                            ft.MaxTextWidth = rect.Width;
+                            ft.MaxTextHeight = RowHeight;
                             if (Math.Abs(rectWidth - rect.Width) > 0.01)
                             {
                                 state.Dispose();
                                 state = context.PushClip(rect);
                             }
-                            context.DrawText(textColor, new Point(rect.X + ColumnSpacing, y + RowHeight / 2 - ft.Bounds.Height / 2), ft);   
+                            context.DrawText(ft, new Point(rect.X + ColumnSpacing, y + RowHeight / 2 - ft.Height / 2));
                         }
                     }
                     
@@ -132,7 +131,7 @@ public partial class VeryFastTableView
             return;
         
         FontFamily font = FontFamily.Default;
-        if (Application.Current.Styles.TryGetResource("MainFontSans", out var mainFontSans) && mainFontSans is FontFamily mainFontSansFamily)
+        if (Application.Current!.Styles.TryGetResource("MainFontSans", out var mainFontSans) && mainFontSans is FontFamily mainFontSansFamily)
             font = mainFontSansFamily;
 
         var scrollViewer = ScrollViewer;
@@ -153,15 +152,14 @@ public partial class VeryFastTableView
                 continue;
             
             var column = Columns[i];
-            var ft = new FormattedText
+            var ft = new FormattedText(
+                column.Header, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface(font, FontStyle.Normal, FontWeight.Bold), 12, BorderPen.Brush)
             {
-                Text = column.Header,
-                Constraint = new Size(column.Width, RowHeight),
-                Typeface = new Typeface(font, FontStyle.Normal, FontWeight.Bold),
-                FontSize = 12
+                MaxTextWidth = column.Width,
+                MaxTextHeight = RowHeight
             };
             var state = context.PushClip(new Rect(x + ColumnSpacing, y, Math.Max(0, column.Width - ColumnSpacing * 2), RowHeight));
-            context.DrawText(BorderPen.Brush, new Point(x + ColumnSpacing, y + RowHeight / 2 - ft.Bounds.Height / 2), ft);
+            context.DrawText(ft, new Point(x + ColumnSpacing, y + RowHeight / 2 - ft.Height / 2));
             state.Dispose();
             
             x += column.Width;

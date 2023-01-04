@@ -215,6 +215,6 @@
 
     <Style Selector="views|EventAiEditorView Button /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="CornerRadius" Value="0" />
-        <Setter Property="BoxShadow" Value="" />
+        <Setter Property="BoxShadow" Value="none" />
     </Style>
 </Styles>

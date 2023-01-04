@@ -13,7 +13,7 @@ namespace WDE.Common.Avalonia.Utils
         public static readonly AvaloniaProperty<bool> FocusFirstProperty =
             AvaloniaProperty.RegisterAttached<FocusUtils, IControl, bool>("FocusFirst");
         
-        public static bool GetFocusFirst(IControl control) => control.GetValue(FocusFirstProperty);
+        public static bool GetFocusFirst(IControl control) => (bool?)control.GetValue(FocusFirstProperty) ?? false;
         public static void SetFocusFirst(IControl control, bool value)
         {
             control.SetValue(FocusFirstProperty, value);
@@ -22,7 +22,7 @@ namespace WDE.Common.Avalonia.Utils
         public static readonly AvaloniaProperty<NavigationMethod> FocusFirstMethodProperty =
             AvaloniaProperty.RegisterAttached<FocusUtils, IControl, NavigationMethod>("FocusFirstMethod", NavigationMethod.Tab);
         
-        public static NavigationMethod GetFocusFirstMethod(IControl control) => control.GetValue(FocusFirstMethodProperty);
+        public static NavigationMethod GetFocusFirstMethod(IControl control) => (NavigationMethod?)control.GetValue(FocusFirstMethodProperty) ?? NavigationMethod.Tab;
         public static void SetFocusFirstMethod(IControl control, NavigationMethod value)
         {
             control.SetValue(FocusFirstMethodProperty, value);
@@ -53,7 +53,7 @@ namespace WDE.Common.Avalonia.Utils
 
             if (visual.Focusable)
             {
-                FocusManager.Instance.Focus(visual, GetFocusFirstMethod((IControl)visual));
+                FocusManager.Instance?.Focus(visual, GetFocusFirstMethod((IControl)visual));
                 return true;
             }
             else

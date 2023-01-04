@@ -19,7 +19,7 @@ public class SmartScriptEditorToolBar : UserControl
         InitializeComponent();
         focusCommand = new DelegateCommand(() =>
         {
-            TextBox tb = this.FindControl<TextBox>("SearchTextBox");
+            TextBox tb = this.GetControl<TextBox>("SearchTextBox");
             tb?.Focus();
         });
     }

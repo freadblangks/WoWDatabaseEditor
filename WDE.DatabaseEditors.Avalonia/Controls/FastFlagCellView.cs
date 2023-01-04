@@ -70,22 +70,21 @@ namespace WDE.DatabaseEditors.Avalonia.Controls
                 return;
             DispatcherTimer.RunOnce(() =>
             {
-                flagsComboBox!.RaiseEvent(new TextInputEventArgs
-                {
-                    Device = e.Device,
-                    Handled = false,
-                    Text = e.Text,
-                    Route = e.Route,
-                    RoutedEvent = e.RoutedEvent,
-                    Source = flagsComboBox
-                });
+                var args = Activator.CreateInstance<TextInputEventArgs>();
+                args.Device = e.Device;
+                args.Handled = false;
+                args.Text = e.Text;
+                args.Route = e.Route;
+                args.RoutedEvent = e.RoutedEvent;
+                args.Source = flagsComboBox;
+                flagsComboBox!.RaiseEvent(args);
             }, TimeSpan.FromMilliseconds(2));
         }
 
         private void CompletionComboBoxOnClosed()
         {
             EndEditing(true);
-            FocusManager.Instance.Focus(this, NavigationMethod.Tab);
+            FocusManager.Instance?.Focus(this, NavigationMethod.Tab);
         }
 
         protected override Control CreateEditingControl()

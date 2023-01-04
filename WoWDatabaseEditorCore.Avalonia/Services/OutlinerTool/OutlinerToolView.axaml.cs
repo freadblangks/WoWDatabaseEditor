@@ -13,7 +13,7 @@ public class OutlinerToolView : UserControl
     public OutlinerToolView()
     {
         InitializeComponent();
-        treeView = this.FindControl<OutlinerFastTreeView>("TreeView");
+        treeView = this.GetControl<OutlinerFastTreeView>("TreeView");
     }
 
     private void InitializeComponent()

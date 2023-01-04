@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -35,7 +37,7 @@ namespace WDE.EventAiEditor.Avalonia.Editor
         
         public static string GetGroup(IControl control)
         {
-            return control.GetValue(GroupProperty);
+            return (string?)control.GetValue(GroupProperty) ?? "(null)";
         }
         
         public static void SetGroup(IControl control, string value)
@@ -65,13 +67,15 @@ namespace WDE.EventAiEditor.Avalonia.Editor
                 if (group.Value.height < float.Epsilon)
                     continue;
                 var lineY = group.Value.Item1 + 15;
-                var ft = new FormattedText();
-                ft.FontSize = 12;
-                ft.Text = group.Key;
-                ft.Typeface = new Typeface(TextBlock.GetFontFamily(this), FontStyle.Normal, FontWeight.Bold);
+                var ft = new FormattedText(group.Key,
+                    CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    new Typeface(TextElement.GetFontFamily(this), FontStyle.Normal, FontWeight.Bold),
+                    12,
+                    brush);
                 context.DrawLine(pen, new Point(0, lineY), new Point(15, lineY));
-                context.DrawText(brush, new Point(20, group.Value.Item1 + 16 - ft.Bounds.Height / 2), ft);
-                context.DrawLine(pen, new Point(20 + ft.Bounds.Width + 5, lineY), new Point(this.Bounds.Width, lineY));
+                context.DrawText(ft, new Point(20, group.Value.Item1 + 16 - ft.Height / 2));
+                context.DrawLine(pen, new Point(20 + ft.Width + 5, lineY), new Point(this.Bounds.Width, lineY));
             }
         }
 
@@ -195,7 +199,7 @@ namespace WDE.EventAiEditor.Avalonia.Editor
             return finalSize;
         }
 
-        private (int, int)? Find(IInputElement element)
+        private (int, int)? Find(IInputElement? element)
         {
             BuildGrid();
             for (int i = 0; i < grid.GetLength(0); ++i)
@@ -212,9 +216,9 @@ namespace WDE.EventAiEditor.Avalonia.Editor
             return null;
         }
         
-        public IInputElement GetControl(NavigationDirection direction, IInputElement @from, bool wrap)
+        public IInputElement? GetControl(NavigationDirection direction, IInputElement? @from, bool wrap)
         {
-            IControl control = (IControl)@from;
+            IControl? control = (IControl?)@from;
             var index = Find(from);
             if (index == null)
                 return from;

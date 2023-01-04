@@ -3,6 +3,7 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Media;
 using JetBrains.Profiler.Api;
 using WDE.Common.Avalonia.Controls;
 using WDE.Common.Utils;
@@ -157,7 +158,8 @@ public partial class VirtualizedSmartScriptPanel
         {
             if (control == null)
             {
-                control = templateGetter().Build(null!);
+                control = templateGetter().Build(null!)!;
+                control.DataContext = dataContext;
                 panel.Children.Add(control);
                 control.ClipToBounds = true;
                 control.Arrange(new Rect(-1, -1, 1, 1));

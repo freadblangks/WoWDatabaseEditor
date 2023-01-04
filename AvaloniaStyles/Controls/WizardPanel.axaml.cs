@@ -160,7 +160,7 @@ namespace AvaloniaStyles.Controls
 
         public static readonly AttachedProperty<string> StepTitleProperty = AvaloniaProperty.RegisterAttached<IAvaloniaObject, string>("StepTitle", typeof(WizardPanel));
 
-        public static string? GetStepTitle(IAvaloniaObject obj) => obj.GetValue(StepTitleProperty);
+        public static string? GetStepTitle(IAvaloniaObject obj) => (string?)obj?.GetValue(StepTitleProperty) ?? "(null)";
 
         public static void SetStepTitle(IAvaloniaObject obj, string value)
         {

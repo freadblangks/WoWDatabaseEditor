@@ -31,7 +31,7 @@ public partial class VeryFastTableView : Control, IKeyboardNavigationHandler
     private static bool GetResource<T>(string key, T defaultVal, out T outT)
     {
         outT = defaultVal;
-        if (Application.Current.Styles.TryGetResource(key, out var res) && res is T t)
+        if (Application.Current!.Styles.TryGetResource(key, out var res) && res is T t)
         {
             outT = t;
             return true;
@@ -140,10 +140,10 @@ public partial class VeryFastTableView : Control, IKeyboardNavigationHandler
         }
     }
 
-    protected override void OnPointerLeave(PointerEventArgs e)
+    protected override void OnPointerExited(PointerEventArgs e)
     {
         Cursor = Cursor.Default;
-        base.OnPointerLeave(e);
+        base.OnPointerExited(e);
     }
 
     protected override void OnPointerMoved(PointerEventArgs e)

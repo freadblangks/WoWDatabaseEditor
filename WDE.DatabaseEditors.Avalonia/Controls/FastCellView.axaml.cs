@@ -31,8 +31,8 @@ namespace WDE.DatabaseEditors.Avalonia.Controls
         {
             base.OnApplyTemplate(e);
 
-            partPanel = e.NameScope.Find<Panel>("PART_Panel");
-            partText = e.NameScope.Find<TextBlock>("PART_text");
+            partPanel = e.NameScope.Get<Panel>("PART_Panel");
+            partText = e.NameScope.Get<TextBlock>("PART_text");
             
             if (!isReadOnly)
                 partText.Cursor = new Cursor(StandardCursorType.Ibeam);
@@ -104,7 +104,7 @@ namespace WDE.DatabaseEditors.Avalonia.Controls
                         Value = value;
                 }
                 else
-                    Value = textBox.Text;
+                    Value = textBox.Text ?? "";
             }
 
             textBox = null;
@@ -122,15 +122,14 @@ namespace WDE.DatabaseEditors.Avalonia.Controls
                 {
                     if (textBox == null)
                         return;
-                    textBox.RaiseEvent(new TextInputEventArgs
-                    {
-                        Device = e.Device,
-                        Handled = false,
-                        Text = e.Text,
-                        Route = e.Route,
-                        RoutedEvent = e.RoutedEvent,
-                        Source = textBox
-                    });
+                    var args = Activator.CreateInstance<TextInputEventArgs>();
+                    args.Device = e.Device;
+                    args.Handled = false;
+                    args.Text = e.Text;
+                    args.Route = e.Route;
+                    args.RoutedEvent = e.RoutedEvent;
+                    args.Source = textBox;
+                    textBox.RaiseEvent(args);
                 }, TimeSpan.FromMilliseconds(1));
             }
         }

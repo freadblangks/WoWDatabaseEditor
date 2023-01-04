@@ -41,7 +41,7 @@ namespace WoWDatabaseEditorCore.Avalonia.Extensions
                 if (!window.IsActive)
                 {
                     int val = 1;
-                    DwmSetWindowAttribute(window.PlatformImpl.Handle.Handle,
+                    DwmSetWindowAttribute(window.PlatformImpl!.Handle.Handle,
                         DWMWINDOWATTRIBUTE.TransitionsForceDisabled,
                         ref val,
                         sizeof(int));

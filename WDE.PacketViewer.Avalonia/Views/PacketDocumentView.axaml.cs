@@ -26,7 +26,7 @@ namespace WDE.PacketViewer.Avalonia.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-            editor = this.FindControl<TextEditor>("TextEditor");
+            editor = this.GetControl<TextEditor>("TextEditor");
             editor.TextArea.TextEntered += TextAreaOnTextEntered;
 
             editor.Options.AllowScrollBelowDocument = false;

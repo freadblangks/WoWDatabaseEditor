@@ -1,3 +1,4 @@
+using System.Globalization;
 using Avalonia;
 using Avalonia.Media;
 using AvaloniaStyles.Controls.FastTableView;
@@ -52,7 +53,7 @@ public class CustomCellDrawer : CustomCellDrawerInteractorBase, ICustomCellDrawe
         if (!row.Entity.ExistInDatabase)
         {
             var pen = row.IsPhantomEntity ? PhantomRowPen : ModifiedCellPen;
-            context.FillRectangle(pen.Brush, rect.WithWidth(5));
+            context.FillRectangle(pen.Brush ?? Brushes.Black, rect.WithWidth(5));
             context.DrawLine(pen, rect.TopLeft,rect.TopRight);
             context.DrawLine(pen, rect.BottomLeft, rect.BottomRight);
         }
@@ -74,14 +75,14 @@ public class CustomCellDrawer : CustomCellDrawerInteractorBase, ICustomCellDrawe
         context.DrawRectangle((!enabled ? ButtonBackgroundDisabledPen : isOver ? (leftPressed ? ButtonBackgroundPressedPen : ButtonBackgroundHoverPen) : ButtonBackgroundPen).Brush, ButtonBorderPen, rect, 4, 4);
 
         var state = context.PushClip(rect);
-        var ft = new FormattedText
+        var ft = new FormattedText(text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, Typeface.Default, 12,
+            ButtonTextPen.Brush)
         {
-            Text = text,
-            Constraint = new Size(rect.Width, rect.Height),
-            Typeface = Typeface.Default,
-            FontSize = 12
+            MaxTextWidth = rect.Width,
+            MaxTextHeight = rect.Height
         };
-        context.DrawText(ButtonTextPen.Brush, new Point(rect.Center.X - ft.Bounds.Width / 2, rect.Center.Y - ft.Bounds.Height / 2), ft);
+
+        context.DrawText(ft, new Point(rect.Center.X - ft.Width / 2, rect.Center.Y - ft.Height / 2));
         state.Dispose();
     }
 
